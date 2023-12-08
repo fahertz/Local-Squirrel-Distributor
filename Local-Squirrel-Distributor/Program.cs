@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Squirrel;
 
 namespace Local_Squirrel_Distributor
 {
@@ -16,7 +17,7 @@ namespace Local_Squirrel_Distributor
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new frmUpdateScreen());
         }
     }
 }
