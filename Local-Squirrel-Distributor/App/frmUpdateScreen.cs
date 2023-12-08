@@ -8,6 +8,7 @@ using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -27,43 +28,37 @@ namespace Local_Squirrel_Distributor
         {
             try
             {
-                if (UpdateSquirrel.CheckForUpdates())
-                {
+                
                     lblSearchingForUpdates.Text = $"Version: {UpdateSquirrel.nextVersion} detectada. ({Application.ProductVersion} → {UpdateSquirrel.nextVersion})";
-                    if (await UpdateSquirrel.DownloadReleaseAsync())
+                    pcbSearchingForUpdates.BackgroundImage = Properties.Resources.Green_Button;
+                    pcbSearchingForUpdates.BackgroundImageLayout = ImageLayout.Stretch;
+                if (await UpdateSquirrel.DownloadReleaseAsync(UpdateSquirrel._updateUrl))
                     {
                         lblDownload.Text = $"Download Completed.";
                         pcbDownload.BackgroundImage = Properties.Resources.Green_Button;
                         pcbDownload.BackgroundImageLayout = ImageLayout.Stretch;
-                        if (await UpdateSquirrel.InstallReleaseAsync())
+                        if (await UpdateSquirrel.InstallReleaseAsync(UpdateSquirrel._updateUrl))
                         {
                             lblInstall.Text = $"Install Completed.";
                             pcbInstall.BackgroundImage = Properties.Resources.Green_Button;
                             pcbInstall.BackgroundImageLayout = ImageLayout.Stretch;
-                            if (await UpdateSquirrel.UpdateAppAsync())
+                            if (await UpdateSquirrel.UpdateAppAsync(UpdateSquirrel._updateUrl))
                             {
                                 lblUpdate.Text = $"Update Completed.";
                                 pcbUpdate.BackgroundImage = Properties.Resources.Green_Button;
-                                pcbUpdate.BackgroundImageLayout = ImageLayout.Stretch;
-                                UpdateSquirrel.RestartApplication();
+                                pcbUpdate.BackgroundImageLayout = ImageLayout.Stretch;                                
                             };
                         };
-                    }
-
-                }
-                else
-                {
-                    lblSearchingForUpdates.Text = $"Nenhuma nova versão detectada.";
-                    pcbSearchingForUpdates.BackgroundImage = Properties.Resources.Green_Button;
-                    pcbSearchingForUpdates.BackgroundImageLayout = ImageLayout.Stretch;
-                    frmMenu frmMenu = new frmMenu();
-                    frmMenu.Show();
-                    this.Close();
-                }
+                    }                                
             }
             catch
             {
                 
+            }
+            finally
+            {
+                Thread.Sleep(5000);
+                UpdateSquirrel.RestartApplication();
             }
                 
         }
@@ -87,6 +82,16 @@ namespace Local_Squirrel_Distributor
         {
             pcbSearchingForUpdates.BackgroundImage = Properties.Resources.Red_Button;
             pcbSearchingForUpdates.BackgroundImageLayout = ImageLayout.Stretch;
+            
+            pcbDownload.BackgroundImage = Properties.Resources.Red_Button;
+            pcbDownload.BackgroundImageLayout = ImageLayout.Stretch;
+            
+            pcbInstall.BackgroundImage = Properties.Resources.Red_Button;
+            pcbInstall.BackgroundImageLayout = ImageLayout.Stretch;
+
+            pcbUpdate.BackgroundImage = Properties.Resources.Red_Button;
+            pcbUpdate.BackgroundImageLayout = ImageLayout.Stretch;
+
         }
     }
 }

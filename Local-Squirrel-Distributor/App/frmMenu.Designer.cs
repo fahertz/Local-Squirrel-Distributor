@@ -30,6 +30,7 @@
         {
             this.lblProgramVersion = new System.Windows.Forms.Label();
             this.txtProgramVersion = new System.Windows.Forms.TextBox();
+            this.btnRollback = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblProgramVersion
@@ -48,11 +49,21 @@
             this.txtProgramVersion.Size = new System.Drawing.Size(81, 20);
             this.txtProgramVersion.TabIndex = 1;
             // 
+            // btnRollback
+            // 
+            this.btnRollback.Location = new System.Drawing.Point(139, 9);
+            this.btnRollback.Name = "btnRollback";
+            this.btnRollback.Size = new System.Drawing.Size(130, 46);
+            this.btnRollback.TabIndex = 2;
+            this.btnRollback.Text = "Rollback Version";
+            this.btnRollback.UseVisualStyleBackColor = true;
+            // 
             // frmMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(482, 207);
+            this.Controls.Add(this.btnRollback);
             this.Controls.Add(this.txtProgramVersion);
             this.Controls.Add(this.lblProgramVersion);
             this.Name = "frmMenu";
@@ -66,5 +77,6 @@
 
         private System.Windows.Forms.Label lblProgramVersion;
         private System.Windows.Forms.TextBox txtProgramVersion;
+        private System.Windows.Forms.Button btnRollback;
     }
 }

@@ -14,6 +14,7 @@ namespace Local_Squirrel_Distributor.Configuration
         /** Place here the local path where your application will check for updates **/
         //public static readonly string _updateUrl = @"\\srvgeneric\Softwares\Local-Squirrel-Distributor\Releases";
         public static readonly string _updateUrl = @"C:\Local-Squirrel-Distributor\Releases";
+        public static readonly string _rollackUrl = @"C:\Local-Squirrel-Distributor\Rollback";
         public static readonly bool _searchForUpdatesEnabled = true;
         public static string nextVersion { get; set; }
 
@@ -35,16 +36,15 @@ namespace Local_Squirrel_Distributor.Configuration
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                CustomMessage.Error("Failed to search updates: "+ex.Message);
+            catch (Exception)
+            {                
                 return false;
             }
             return false;
                                 
         }
         
-        public static async Task<bool> DownloadReleaseAsync()
+        public static async Task<bool> DownloadReleaseAsync(string path)
         {
             try
             {
@@ -53,6 +53,7 @@ namespace Local_Squirrel_Distributor.Configuration
                     var updateInfo = await updateManager.CheckForUpdate();
                     if (updateInfo.ReleasesToApply.Count > 0)
                     {
+                        MessageBox.Show(updateInfo.FutureReleaseEntry.Version.ToString());
                         await updateManager.DownloadReleases(updateInfo.ReleasesToApply);
                         return true;
                     }
@@ -65,7 +66,7 @@ namespace Local_Squirrel_Distributor.Configuration
                 return false;
             }
         }
-        public static async Task<bool> InstallReleaseAsync()
+        public static async Task<bool> InstallReleaseAsync(string path)
         {
             try
             {
@@ -86,7 +87,7 @@ namespace Local_Squirrel_Distributor.Configuration
                 return false;
             }
         }
-        public static async Task<bool> UpdateAppAsync()
+        public static async Task<bool> UpdateAppAsync(string path)
         {
             try
             {

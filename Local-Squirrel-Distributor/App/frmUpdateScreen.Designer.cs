@@ -114,7 +114,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(213, 154);
+            this.ClientSize = new System.Drawing.Size(437, 154);
             this.Controls.Add(this.lblUpdate);
             this.Controls.Add(this.pcbUpdate);
             this.Controls.Add(this.lblInstall);
