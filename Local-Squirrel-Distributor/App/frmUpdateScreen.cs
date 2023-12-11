@@ -1,5 +1,6 @@
 ﻿using Local_Squirrel_Distributor.App;
 using Local_Squirrel_Distributor.Configuration;
+using Local_Squirrel_Distributor.Customization;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,63 +20,84 @@ namespace Local_Squirrel_Distributor
         public frmUpdateScreen()
         {
             InitializeComponent();
+            ConfigureFormProperties();
             ConfigureFormEvents();
         }
-
 
         /** Async Taks  **/
         private async Task updateApplicationAsync()
         {
             try
             {
-                
-                    lblSearchingForUpdates.Text = $"Version: {UpdateSquirrel.nextVersion} detectada. ({Application.ProductVersion} → {UpdateSquirrel.nextVersion})";
-                    pcbSearchingForUpdates.BackgroundImage = Properties.Resources.Green_Button;
-                    pcbSearchingForUpdates.BackgroundImageLayout = ImageLayout.Stretch;
+                UpdateUIForSearchingUpdates();
                 if (await UpdateSquirrel.DownloadReleaseAsync(UpdateSquirrel._updateUrl))
+                {
+                    UpdateUIForDownloadComplete();
+                    if (await UpdateSquirrel.InstallReleaseAsync(UpdateSquirrel._updateUrl))
                     {
-                        lblDownload.Text = $"Download Completed.";
-                        pcbDownload.BackgroundImage = Properties.Resources.Green_Button;
-                        pcbDownload.BackgroundImageLayout = ImageLayout.Stretch;
-                        if (await UpdateSquirrel.InstallReleaseAsync(UpdateSquirrel._updateUrl))
+                        UpdateUIForInstallComplete();
+                        if (await UpdateSquirrel.UpdateAppAsync(UpdateSquirrel._updateUrl))
                         {
-                            lblInstall.Text = $"Install Completed.";
-                            pcbInstall.BackgroundImage = Properties.Resources.Green_Button;
-                            pcbInstall.BackgroundImageLayout = ImageLayout.Stretch;
-                            if (await UpdateSquirrel.UpdateAppAsync(UpdateSquirrel._updateUrl))
-                            {
-                                lblUpdate.Text = $"Update Completed.";
-                                pcbUpdate.BackgroundImage = Properties.Resources.Green_Button;
-                                pcbUpdate.BackgroundImageLayout = ImageLayout.Stretch;                                
-                            };
-                        };
-                    }                                
+                            UpdateUIForUpdateComplete();
+                        }
+                    }
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                
+                // Log the exception or show a message to the user
+                Console.WriteLine($"Error during update: {ex.Message}");
             }
             finally
             {
-                Thread.Sleep(5000);
+                await Task.Delay(5000);
                 UpdateSquirrel.RestartApplication();
             }
-                
+
         }
 
-
+        /** Sync Methods **/
+        private void UpdateUIForSearchingUpdates()
+        {
+            lblSearchingForUpdates.Text = $"Version: {UpdateSquirrel.nextVersion} detected. ({Application.ProductVersion} → {UpdateSquirrel.nextVersion})";
+            UpdateButtonStyle(pcbSearchingForUpdates);
+        }
+        private void UpdateUIForDownloadComplete()
+        {
+            lblDownload.Text = "Download Completed.";
+            UpdateButtonStyle(pcbDownload);
+        }
+        private void UpdateUIForInstallComplete()
+        {
+            lblInstall.Text = "Install Completed.";
+            UpdateButtonStyle(pcbInstall);
+        }
+        private void UpdateUIForUpdateComplete()
+        {
+            lblUpdate.Text = "Update Completed.";
+            UpdateButtonStyle(pcbUpdate);
+        }
+        private void UpdateButtonStyle(PictureBox pictureBox)
+        {
+            pictureBox.BackgroundImage = Properties.Resources.Green_Button;
+            pictureBox.BackgroundImageLayout = ImageLayout.Stretch;
+        }
 
         /** Form Configuration **/
         private void ConfigureFormEvents()
         {
             this.Load += frmUpdateScreen_Load;
         }
+        private void ConfigureFormProperties()
+        {
+            this.toDefaultForm();
+        }
         private async void frmUpdateScreen_Load(object sender, EventArgs e)
         {
             ConfigurePictureBoxAttributes();
             await updateApplicationAsync();
-        }
 
+        }
 
         /** PictureBox Configuration **/
         private void ConfigurePictureBoxAttributes()

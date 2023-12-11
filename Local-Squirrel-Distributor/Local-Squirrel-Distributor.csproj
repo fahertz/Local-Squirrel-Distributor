@@ -121,6 +121,13 @@
     <Compile Include="App\frmUpdateScreen.Designer.cs">
       <DependentUpon>frmUpdateScreen.cs</DependentUpon>
     </Compile>
+    <Compile Include="Customization\CustomForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Customization\CustomForm.Designer.cs">
+      <DependentUpon>CustomForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Customization\CustomFormConfiguration.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Configuration\UpdateSquirrel.cs" />
     <Compile Include="Customization\CustomMessage.cs" />
